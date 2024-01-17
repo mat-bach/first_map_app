@@ -1,0 +1,7 @@
+/backend/api/__pycache__
+/backend/api/migrations
+/backend/backend/__pycache__
+data
+db
+env
+/frontend/node_modules

@@ -1,0 +1,58 @@
+services:
+
+  db:
+    container_name: db
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-db
+    restart: always
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+      - ./data/db:/var/lib/postgres/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "6543:5432"
+
+  backend:
+    build:
+      context: ./backend
+    tty: true
+    command: python ./backend/manage.py runserver 0.0.0.0:8000
+    restart: always
+    volumes:
+      - .:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    volumes:
+      - frontend:/app/build
+    restart: on-failure
+    depends_on:
+      - backend
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - static:/static
+      - frontend:/var/www/frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  static:
+  frontend:
