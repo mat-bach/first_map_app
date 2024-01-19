@@ -1,0 +1,64 @@
+services:
+
+  db:
+    container_name: db
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-db
+    restart: always
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+      - ./data/db:/var/lib/postgres/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "6543:5432"
+
+  backend:
+    build:
+      context: ./backend
+    tty: true
+    command: sh -c "cd ./backend && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"
+    restart: always
+    volumes:
+      - .:/code
+      # - staticfiles:/backend/staticfiles
+      - ./backend/staticfiles/rest_framework:/etc/nginx/code/backend/staticfiles/rest_framework
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DJANGO_SETTINGS_MODULE=backend.settings.prod
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    expose:
+      - 8000
+
+  frontend:
+    build:
+      context: ./frontend
+    volumes:
+      - frontend:/app/build
+    restart: on-failure
+    depends_on:
+      - backend
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - static:/static
+      - frontend:/var/www/frontend
+      - staticfiles:/staticfiles
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  static:
+  frontend:
+  staticfiles:
