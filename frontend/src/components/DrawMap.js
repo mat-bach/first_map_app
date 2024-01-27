@@ -26,7 +26,7 @@ const DrawTools = () => {
           feature.geometry.coordinates.map((item)=>{
             console.log(item)
          })
-          axios.post('http://127.0.0.1:8000/api/rectangles/', {
+          axios.post('https://matbach.pl/api/rectangles/', {
             name: "POST_TEST",
             location: feature.geometry
           })
@@ -47,7 +47,7 @@ const DrawTools = () => {
           feature.geometry.coordinates.map((item)=>{
             console.log(item)
          })
-          axios.post('http://127.0.0.1:8000/api/points/', {
+          axios.post('https://matbach.pl/api/points/', {
             name: "POST_TEST",
             location: feature.geometry
           })

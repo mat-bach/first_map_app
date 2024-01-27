@@ -24,8 +24,10 @@ services:
     restart: always
     volumes:
       - .:/code
+      # - staticfiles:/staticfiles
       # - staticfiles:/backend/staticfiles
-      - ./backend/staticfiles/rest_framework:/etc/nginx/code/backend/staticfiles/rest_framework
+      # - ./backend/staticfiles/rest_framework:/etc/nginx/code/backend/staticfiles/rest_framework
+      # - ../../staticfiles/:/code/backend/staticfiles/
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DJANGO_SETTINGS_MODULE=backend.settings.prod
@@ -51,9 +53,13 @@ services:
       - ./config/nginx:/etc/nginx/templates
       - static:/static
       - frontend:/var/www/frontend
-      - staticfiles:/staticfiles
+      - .:/code
+      # - staticfiles:/staticfiles
+      # - staticfiles:/staticfiles
+      # - ../../staticfiles/:/code/backend/staticfiles/
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - backend
       - frontend
@@ -61,4 +67,3 @@ services:
 volumes:
   static:
   frontend:
-  staticfiles:

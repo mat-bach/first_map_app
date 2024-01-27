@@ -7,3 +7,5 @@ env
 /frontend/node_modules
 staticfiles
 .env
+backend/ssl/matbach.key
+backend/ssl/matbach.pem

@@ -20,8 +20,8 @@ from rest_framework import routers
 from api import views
 
 router = routers.DefaultRouter()
-router.register(r'rectangles', views.RectangleView, 'api')
-router.register(r'points', views.PointView, 'api')
+router.register(r'points', views.PointView, basename='points')
+router.register(r'rectangles', views.RectangleView, basename='rectangles')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

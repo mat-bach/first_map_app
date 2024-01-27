@@ -9,7 +9,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 function Polygons() {
-  const url = "http://127.0.0.1:8000/api/rectangles/";
+  const url = "https://matbach.pl/api/rectangles/";
   const [data, setData] = useState([]);
 
   const fetchInfo = () => {
